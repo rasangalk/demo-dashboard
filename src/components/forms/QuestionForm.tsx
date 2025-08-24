@@ -141,8 +141,14 @@ export function QuestionForm({
       try {
         const response = await fetch('/api/subjects');
         if (response.ok) {
-          const data = await response.json();
-          setSubjects(data);
+          const json = await response.json();
+          const subjectsData: Subject[] = Array.isArray(json)
+            ? json
+            : json?.data ?? [];
+          setSubjects(subjectsData);
+        } else {
+          console.error('Failed to fetch subjects:', response.statusText);
+          setSubjects([]);
         }
       } catch (error) {
         console.error('Error fetching subjects:', error);
@@ -176,8 +182,11 @@ export function QuestionForm({
             `/api/modules?subjectId=${selectedSubject}`
           );
           if (response.ok) {
-            const data = await response.json();
-            setModules(data);
+            const json = await response.json();
+            const modulesData: Module[] = Array.isArray(json)
+              ? json
+              : json?.data ?? [];
+            setModules(modulesData);
 
             // If initialSelection has moduleId, keep it
             if (
@@ -188,6 +197,10 @@ export function QuestionForm({
             } else {
               form.setValue('moduleId', '');
             }
+          } else {
+            console.error('Failed to fetch modules:', response.statusText);
+            setModules([]);
+            form.setValue('moduleId', '');
           }
         } catch (error) {
           console.error('Error fetching modules:', error);
@@ -211,8 +224,11 @@ export function QuestionForm({
             `/api/submodules?moduleId=${selectedModule}`
           );
           if (response.ok) {
-            const data = await response.json();
-            setSubModules(data);
+            const json = await response.json();
+            const subModulesData: SubModule[] = Array.isArray(json)
+              ? json
+              : json?.data ?? [];
+            setSubModules(subModulesData);
 
             // If initialSelection has subModuleId, keep it
             if (
@@ -223,6 +239,10 @@ export function QuestionForm({
             } else {
               form.setValue('subModuleId', '');
             }
+          } else {
+            console.error('Failed to fetch submodules:', response.statusText);
+            setSubModules([]);
+            form.setValue('subModuleId', '');
           }
         } catch (error) {
           console.error('Error fetching submodules:', error);

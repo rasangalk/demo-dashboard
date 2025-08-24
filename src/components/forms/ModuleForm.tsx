@@ -54,8 +54,15 @@ export function ModuleForm({ initialData, onSubmit }: ModuleFormProps) {
       try {
         const response = await fetch('/api/subjects');
         if (response.ok) {
-          const data = await response.json();
-          setSubjects(data);
+          const json = await response.json();
+          // API list endpoint returns an object like { data: Subject[], page, ... }
+          // but some callers or endpoints may return the raw array. Normalize both.
+          const subjectsData: Subject[] = Array.isArray(json)
+            ? json
+            : json?.data ?? [];
+          setSubjects(subjectsData);
+        } else {
+          console.error('Failed to fetch subjects:', response.statusText);
         }
       } catch (error) {
         console.error('Error fetching subjects:', error);
@@ -137,7 +144,7 @@ export function ModuleForm({ initialData, onSubmit }: ModuleFormProps) {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {subjects.map((subject) => (
+                  {subjects?.map((subject) => (
                     <SelectItem key={subject.id} value={String(subject.id)}>
                       {subject.name}
                     </SelectItem>

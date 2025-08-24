@@ -58,11 +58,19 @@ export function SubModuleForm({ initialData, onSubmit }: SubModuleFormProps) {
       try {
         const response = await fetch('/api/modules');
         if (response.ok) {
-          const data = await response.json();
-          setModules(data);
+          const json = await response.json();
+          // Normalize response shape: API may return an array or an object like { data: Module[] }
+          const modulesData: Module[] = Array.isArray(json)
+            ? json
+            : json?.data ?? [];
+          setModules(modulesData);
+        } else {
+          console.error('Failed to fetch modules:', response.statusText);
+          setModules([]);
         }
       } catch (error) {
         console.error('Error fetching modules:', error);
+        setModules([]);
       }
     };
 
