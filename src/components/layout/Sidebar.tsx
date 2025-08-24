@@ -25,6 +25,16 @@ const Sidebar: FC<SidebarProps> = ({ className }) => {
         <SidebarLink href='/attempt-questions' label='Attempt Questions' />
       </nav>
       <LogoutButton />
+      <div className='mt-4 text-center text-xs text-muted-foreground'>
+        <a
+          href='https://www.linkedin.com/in/rasangalk/'
+          target='_blank'
+          rel='noopener noreferrer'
+          className='hover:text-primary transition-colors'
+        >
+          Developed by rasangalk
+        </a>
+      </div>
     </div>
   );
 };
