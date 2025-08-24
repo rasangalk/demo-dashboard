@@ -13,7 +13,13 @@ export async function GET(request: NextRequest) {
     const limit = searchParams.get('limit');
 
     // Build the where clause for the query
-    const where: any = {};
+    const where: {
+      subModuleId?: { in: number[] };
+      subModule?: {
+        moduleId?: { in: number[] };
+        module?: { subjectId?: number };
+      };
+    } = {};
 
     // Sub-module filter (primary filter)
     if (!allSubModules && subModules.length > 0) {

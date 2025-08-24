@@ -79,11 +79,11 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       }
 
       // Check if module exists
-      const module = await prisma.module.findUnique({
+      const moduleData = await prisma.module.findUnique({
         where: { id: moduleIdNumber },
       });
 
-      if (!module) {
+      if (!moduleData) {
         return NextResponse.json(
           { error: 'Module not found' },
           { status: 404 }

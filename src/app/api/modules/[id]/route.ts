@@ -15,7 +15,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: 'Invalid module ID' }, { status: 400 });
     }
 
-    const module = await prisma.module.findUnique({
+    const qModule = await prisma.module.findUnique({
       where: { id },
       include: {
         subject: true,
@@ -23,11 +23,11 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       },
     });
 
-    if (!module) {
+    if (!qModule) {
       return NextResponse.json({ error: 'Module not found' }, { status: 404 });
     }
 
-    return NextResponse.json(module);
+    return NextResponse.json(qModule);
   } catch (error) {
     console.error('Error fetching module:', error);
     return NextResponse.json(
@@ -74,7 +74,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       }
     }
 
-    const module = await prisma.module.update({
+    const qModule = await prisma.module.update({
       where: { id },
       data: {
         name,
@@ -83,7 +83,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       },
     });
 
-    return NextResponse.json(module);
+    return NextResponse.json(qModule);
   } catch (error) {
     console.error('Error updating module:', error);
     return NextResponse.json(

@@ -4,14 +4,7 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import { Button } from '@/components/ui/button';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useEffect, useState } from 'react';
 import { DataTable } from '@/components/data-table/data-table';
 import { ColumnDef } from '@tanstack/react-table';
@@ -54,11 +47,11 @@ const moduleColumns: ColumnDef<Module>[] = [
     id: 'actions',
     header: 'Actions',
     cell: ({ row }) => {
-      const module = row.original;
+      const moduleItem = row.original;
       return (
         <div className='flex space-x-2'>
           <Button asChild size='sm' variant='outline'>
-            <Link href={`/modules/${module.id}`}>View</Link>
+            <Link href={`/modules/${moduleItem.id}`}>View</Link>
           </Button>
           <Button asChild size='sm' variant='outline'>
             <Link href={`/modules/${module.id}/edit`}>Edit</Link>

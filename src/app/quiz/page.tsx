@@ -208,7 +208,7 @@ export default function QuizPage() {
           <CardHeader>
             <CardTitle>Quiz Completed</CardTitle>
             <CardDescription>
-              You've completed the quiz. Here's your score.
+              You&apos;ve completed the quiz. Here&apos;s your score.
             </CardDescription>
           </CardHeader>
           <CardContent className='p-6'>

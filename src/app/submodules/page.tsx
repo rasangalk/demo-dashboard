@@ -154,7 +154,7 @@ export default function SubModulesPage() {
           setTotal(json.total || 0);
           setTotalPages(json.totalPages || 1);
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         if (!cancelled) console.error('Error fetching sub-modules:', error);
       } finally {
         if (!cancelled) setIsLoading(false);

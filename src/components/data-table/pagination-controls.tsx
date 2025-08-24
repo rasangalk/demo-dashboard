@@ -7,8 +7,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useState, useEffect } from 'react';
-import { useDebounce } from '@/hooks/useDebounce';
 
 interface PaginationControlsProps {
   page: number;

@@ -37,7 +37,7 @@ export default function ViewSubModulePage() {
         } else {
           router.push('/submodules');
         }
-      } catch (e) {
+      } catch (_) {
         router.push('/submodules');
       } finally {
         setIsLoading(false);
@@ -58,7 +58,7 @@ export default function ViewSubModulePage() {
         } else {
           alert('Failed to delete sub-module');
         }
-      } catch (e) {
+      } catch (_) {
         alert('Error deleting sub-module');
       }
     }

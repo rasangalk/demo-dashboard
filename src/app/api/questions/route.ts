@@ -12,7 +12,19 @@ export async function GET(request: NextRequest) {
     );
     const search = searchParams.get('search')?.trim();
 
-    const where: any = {};
+    const where: {
+      subModuleId?: number;
+      OR?: Array<{
+        text?: { contains: string; mode: 'insensitive' };
+        subModule?: {
+          name?: { contains: string; mode: 'insensitive' };
+          module?: {
+            name?: { contains: string; mode: 'insensitive' };
+            subject?: { name: { contains: string; mode: 'insensitive' } };
+          };
+        };
+      }>;
+    } = {};
     if (subModuleId) {
       const subModuleIdNumber = parseInt(subModuleId);
       if (!isNaN(subModuleIdNumber)) where.subModuleId = subModuleIdNumber;
@@ -58,7 +70,7 @@ export async function GET(request: NextRequest) {
       totalPages: total === 0 ? 0 : Math.ceil(total / pageSize),
     });
   } catch (error) {
-    const message = (error as any)?.message?.toString() || '';
+    const message = (error as Error)?.message?.toString() || '';
     const lower = message.toLowerCase();
     const uninitialized =
       lower.includes('no such table') ||

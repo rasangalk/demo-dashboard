@@ -48,11 +48,31 @@ const attemptFormSchema = z.object({
 
 type AttemptFormValues = z.infer<typeof attemptFormSchema>;
 
+interface Subject {
+  id: number;
+  name: string;
+  description?: string;
+}
+
+interface Module {
+  id: number;
+  name: string;
+  description?: string;
+  subjectId: number;
+}
+
+interface SubModule {
+  id: number;
+  name: string;
+  description?: string;
+  moduleId: number;
+}
+
 export default function AttemptQuestionsPage() {
   const router = useRouter();
-  const [subjects, setSubjects] = useState<any[]>([]);
-  const [modules, setModules] = useState<any[]>([]);
-  const [subModules, setSubModules] = useState<any[]>([]);
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [modules, setModules] = useState<Module[]>([]);
+  const [subModules, setSubModules] = useState<SubModule[]>([]);
   const [loading, setLoading] = useState(false);
 
   // Load subjects on initial render
@@ -134,9 +154,9 @@ export default function AttemptQuestionsPage() {
   }, [selectedSubject, form]);
 
   // Load submodules when modules change
-  const selectedModules = form.watch('modules') || [];
-
   useEffect(() => {
+    const selectedModules = form.watch('modules') || [];
+
     if (selectedModules.length > 0) {
       async function loadSubModules() {
         try {
@@ -171,7 +191,7 @@ export default function AttemptQuestionsPage() {
 
       loadSubModules();
     }
-  }, [selectedModules, form]);
+  }, [form]);
 
   const onSubmit = async (values: AttemptFormValues) => {
     setLoading(true);
@@ -245,7 +265,7 @@ export default function AttemptQuestionsPage() {
                       </FormControl>
                       <SelectContent>
                         {Array.isArray(subjects) &&
-                          subjects.map((subject: any) => (
+                          subjects.map((subject: Subject) => (
                             <SelectItem
                               key={subject.id}
                               value={String(subject.id)}
@@ -312,7 +332,7 @@ export default function AttemptQuestionsPage() {
                         </FormLabel>
                       </div>
                       <div className='grid grid-cols-2 gap-4'>
-                        {modules.map((module: any) => (
+                        {modules.map((module: Module) => (
                           <FormItem
                             key={module.id}
                             className='flex flex-row items-start space-x-3 space-y-0'
@@ -412,7 +432,7 @@ export default function AttemptQuestionsPage() {
                         </FormLabel>
                       </div>
                       <div className='grid grid-cols-2 gap-4'>
-                        {subModules.map((subModule: any) => (
+                        {subModules.map((subModule: SubModule) => (
                           <FormItem
                             key={subModule.id}
                             className='flex flex-row items-start space-x-3 space-y-0'

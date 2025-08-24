@@ -47,7 +47,7 @@ export default function LoginPage() {
         const data = await res.json();
         setError(data.error || 'Login failed');
       }
-    } catch (err) {
+    } catch (_) {
       setError('Network error');
     } finally {
       setLoading(false);
@@ -55,7 +55,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className='min-h-screen flex items-center justify-center p-4'>
+    <div className='h-[100vh] flex items-center justify-center p-4'>
       <Card className='w-full max-w-sm'>
         <CardHeader>
           <CardTitle>Sign In</CardTitle>

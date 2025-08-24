@@ -75,7 +75,7 @@ export default function ViewQuestionPage() {
     if (params.id) {
       fetchQuestion();
     }
-  }, [params.id]);
+  }, [params.id, router]);
 
   const handleEdit = () => {
     router.push(`/questions/${params.id}/edit`);

@@ -76,7 +76,7 @@ export default function EditQuestionPage() {
     if (params.id) {
       fetchQuestion();
     }
-  }, [params.id]);
+  }, [params.id, router]);
 
   const handleBack = () => {
     router.push(`/questions/${params.id}`);
@@ -121,13 +121,23 @@ export default function EditQuestionPage() {
     })),
   };
 
+  interface QuestionFormData {
+    text: string;
+    subModuleId: string;
+    answers: {
+      id?: number;
+      text: string;
+      isCorrect: boolean;
+    }[];
+  }
+
   const initialSelection = {
     subjectId: String(question.subModule.module.subject.id),
     moduleId: String(question.subModule.module.id),
     subModuleId: String(question.subModule.id),
   };
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: QuestionFormData) => {
     try {
       const response = await fetch(`/api/questions/${params.id}`, {
         method: 'PUT',

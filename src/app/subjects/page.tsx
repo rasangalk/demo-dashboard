@@ -123,7 +123,7 @@ export default function SubjectsPage() {
           setTotal(json.total || 0);
           setTotalPages(json.totalPages || 1);
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         if (!cancelled) console.error('Error fetching subjects:', error);
       } finally {
         if (!cancelled) setIsLoading(false);

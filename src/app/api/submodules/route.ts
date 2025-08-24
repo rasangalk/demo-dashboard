@@ -12,7 +12,17 @@ export async function GET(request: NextRequest) {
     );
     const search = searchParams.get('search')?.trim();
 
-    const where: any = {};
+    const where: {
+      moduleId?: number;
+      OR?: Array<{
+        name?: { contains: string; mode: 'insensitive' };
+        description?: { contains: string; mode: 'insensitive' };
+        module?: {
+          name?: { contains: string; mode: 'insensitive' };
+          subject?: { name: { contains: string; mode: 'insensitive' } };
+        };
+      }>;
+    } = {};
     if (moduleId) {
       const moduleIdNumber = parseInt(moduleId);
       if (!isNaN(moduleIdNumber)) where.moduleId = moduleIdNumber;
@@ -52,7 +62,7 @@ export async function GET(request: NextRequest) {
     // Common first-run issues we can gracefully handle:
     // 1. DATABASE_URL missing / client init error
     // 2. Tables not migrated yet (e.g. "no such table" / "does not exist")
-    const message = (error as any)?.message?.toString() || '';
+    const message = (error as Error)?.message?.toString() || '';
     const lower = message.toLowerCase();
     const uninitialized =
       lower.includes('no such table') ||
@@ -108,11 +118,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if module exists
-    const module = await prisma.module.findUnique({
+    const moduleData = await prisma.module.findUnique({
       where: { id: moduleIdNumber },
     });
 
-    if (!module) {
+    if (!moduleData) {
       return NextResponse.json({ error: 'Module not found' }, { status: 404 });
     }
 

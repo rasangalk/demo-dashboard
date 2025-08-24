@@ -133,7 +133,7 @@ export function QuestionForm({
   });
 
   // Setup field array for dynamic answers
-  const { fields, append, remove } = useFieldArray({
+  const { fields } = useFieldArray({
     control: form.control,
     name: 'answers',
   });
@@ -241,18 +241,6 @@ export function QuestionForm({
       setIsLoading(false);
     }
   });
-
-  // Handle creating another question
-  const handleCreateAnother = async (data: QuestionFormValues) => {
-    setIsLoading(true);
-    try {
-      if (onCreateAnother) {
-        await onCreateAnother(data);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <Form {...form}>

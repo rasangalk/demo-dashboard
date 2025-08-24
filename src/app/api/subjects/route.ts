@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
       totalPages,
     });
   } catch (error) {
-    const message = (error as any)?.message?.toString() || '';
+    const message = (error as Error)?.message?.toString() || '';
     const lower = message.toLowerCase();
     const uninitialized =
       lower.includes('no such table') ||

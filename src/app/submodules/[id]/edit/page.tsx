@@ -28,7 +28,7 @@ export default function EditSubModulePage() {
         } else {
           router.push('/submodules');
         }
-      } catch (e) {
+      } catch (_) {
         router.push('/submodules');
       } finally {
         setIsLoading(false);
@@ -54,7 +54,7 @@ export default function EditSubModulePage() {
       } else {
         alert('Failed to update sub-module');
       }
-    } catch (e) {
+    } catch (_) {
       alert('Error updating sub-module');
     }
   };

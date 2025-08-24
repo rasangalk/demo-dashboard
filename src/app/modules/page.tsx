@@ -53,16 +53,16 @@ const columns: ColumnDef<Module>[] = [
     id: 'actions',
     header: 'Actions',
     cell: ({ row }) => {
-      const module = row.original;
+      const moduleItem = row.original;
       return (
         <div className='flex space-x-2'>
           <Button asChild size='sm' variant='outline'>
-            <Link href={`/modules/${module.id}`}>View</Link>
+            <Link href={`/modules/${moduleItem.id}`}>View</Link>
           </Button>
           <Button asChild size='sm' variant='outline'>
-            <Link href={`/modules/${module.id}/edit`}>Edit</Link>
+            <Link href={`/modules/${moduleItem.id}/edit`}>Edit</Link>
           </Button>
-          <DeleteButton id={module.id} />
+          <DeleteButton id={moduleItem.id} />
         </div>
       );
     },
@@ -140,7 +140,7 @@ export default function ModulesPage() {
           setTotal(json.total || 0);
           setTotalPages(json.totalPages || 1);
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         if (!cancelled) console.error('Error fetching modules:', error);
       } finally {
         if (!cancelled) setIsLoading(false);

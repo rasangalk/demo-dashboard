@@ -28,7 +28,7 @@ export default function EditModulePage() {
         } else {
           router.push('/modules');
         }
-      } catch (e) {
+      } catch (_) {
         router.push('/modules');
       } finally {
         setIsLoading(false);
@@ -54,7 +54,7 @@ export default function EditModulePage() {
       } else {
         alert('Failed to update module');
       }
-    } catch (e) {
+    } catch (_) {
       alert('Error updating module');
     }
   };

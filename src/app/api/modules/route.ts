@@ -12,7 +12,14 @@ export async function GET(request: NextRequest) {
     );
     const search = searchParams.get('search')?.trim();
 
-    const where: any = {};
+    const where: {
+      subjectId?: number;
+      OR?: Array<{
+        name?: { contains: string; mode: 'insensitive' };
+        description?: { contains: string; mode: 'insensitive' };
+        subject?: { name: { contains: string; mode: 'insensitive' } };
+      }>;
+    } = {};
     if (subjectId) {
       const subjectIdNumber = parseInt(subjectId);
       if (!isNaN(subjectIdNumber)) where.subjectId = subjectIdNumber;
@@ -45,7 +52,7 @@ export async function GET(request: NextRequest) {
       totalPages: total === 0 ? 0 : Math.ceil(total / pageSize),
     });
   } catch (error) {
-    const message = (error as any)?.message?.toString() || '';
+    const message = (error as Error)?.message?.toString() || '';
     const lower = message.toLowerCase();
     const uninitialized =
       lower.includes('no such table') ||
@@ -109,7 +116,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Subject not found' }, { status: 404 });
     }
 
-    const module = await prisma.module.create({
+    const moduleData = await prisma.module.create({
       data: {
         name,
         description,
@@ -117,7 +124,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json(module, { status: 201 });
+    return NextResponse.json(moduleData, { status: 201 });
   } catch (error) {
     console.error('Error creating module:', error);
     return NextResponse.json(

@@ -69,7 +69,7 @@ export default function ViewModulePage() {
         } else {
           router.push('/modules');
         }
-      } catch (e) {
+      } catch (_) {
         router.push('/modules');
       } finally {
         setIsLoading(false);
@@ -90,7 +90,7 @@ export default function ViewModulePage() {
         } else {
           alert('Failed to delete module');
         }
-      } catch (e) {
+      } catch (_) {
         alert('Error deleting module');
       }
     }

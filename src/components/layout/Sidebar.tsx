@@ -63,7 +63,7 @@ const LogoutButton: FC = () => {
         credentials: 'include',
       });
       window.location.href = '/login';
-    } catch (e) {
+    } catch (_) {
       // silent
     }
   }, []);
