@@ -1,33 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Question Bank Admin Dashboard
+
+A Next.js application for managing a question bank system. Administrators can create, update, and delete subjects, modules, sub-modules, and questions with multiple answers.
+
+## Features
+
+- **Subject Management**: Create, view, update, and delete subjects
+- **Module Management**: Create, view, update, and delete modules (attached to subjects)
+- **Sub-Module Management**: Create, view, update, and delete sub-modules (attached to modules)
+- **Question Management**: Create, view, update, and delete questions with multiple answers (attached to sub-modules)
+- **Hierarchical Organization**: Questions are organized in a hierarchical structure (Subject > Module > Sub-Module > Question)
+
+## Tech Stack
+
+- **Frontend**: Next.js 14 with App Router, TypeScript, Tailwind CSS
+- **UI Components**: Shadcn UI
+- **Database**: SQLite (via Prisma)
+- **Form Handling**: React Hook Form with Zod validation
+- **Data Display**: TanStack Table
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+ and npm
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone <repository-url>
+cd demo-dashboard
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Set up the database:
+
+```bash
+npx prisma migrate dev
+```
+
+4. Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser to use the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Database Schema
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The application uses the following data model:
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Subject**: Top-level category
+- **Module**: Belongs to a Subject
+- **SubModule**: Belongs to a Module
+- **Question**: Belongs to a SubModule, contains multiple Answers
+- **Answer**: Belongs to a Question, can be marked as correct or incorrect
 
 ## Deploy on Vercel
 

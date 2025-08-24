@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Subject {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  modules     Module[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Module {
+  id          Int          @id @default(autoincrement())
+  name        String
+  description String?
+  subject     Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  subjectId   Int
+  subModules  SubModule[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model SubModule {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  module      Module     @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  moduleId    Int
+  questions   Question[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Question {
+  id          Int      @id @default(autoincrement())
+  text        String
+  subModule   SubModule @relation(fields: [subModuleId], references: [id], onDelete: Cascade)
+  subModuleId Int
+  answers     Answer[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Answer {
+  id         Int      @id @default(autoincrement())
+  text       String
+  isCorrect  Boolean  @default(false)
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  questionId Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
