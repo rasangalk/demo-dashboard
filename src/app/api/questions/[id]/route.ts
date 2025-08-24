@@ -2,16 +2,14 @@ import prisma from '@/lib/db';
 import { NextRequest, NextResponse } from 'next/server';
 
 interface RouteParams {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 }
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
 
-    if (isNaN(id)) {
+    if (isNaN(parseInt(id))) {
       return NextResponse.json(
         { error: 'Invalid question ID' },
         { status: 400 }
@@ -19,7 +17,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
 
     const question = await prisma.question.findUnique({
-      where: { id },
+      where: { id: parseInt(id) },
       include: {
         subModule: {
           include: {
@@ -53,9 +51,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
 
-    if (isNaN(id)) {
+    if (isNaN(parseInt(id))) {
       return NextResponse.json(
         { error: 'Invalid question ID' },
         { status: 400 }
@@ -116,7 +114,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     await prisma.$transaction(async (prisma) => {
       // Update question
       await prisma.question.update({
-        where: { id },
+        where: { id: parseInt(id) },
         data: {
           text,
           ...(subModuleId && { subModuleId: parseInt(subModuleId) }),
@@ -128,7 +126,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         // Delete existing answers
         await prisma.answer.deleteMany({
           where: {
-            questionId: id,
+            questionId: parseInt(id),
           },
         });
 
@@ -138,7 +136,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
             data: {
               text: answer.text,
               isCorrect: answer.isCorrect || false,
-              questionId: id,
+              questionId: parseInt(id),
             },
           });
         }
@@ -147,7 +145,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
     // Fetch the updated question with answers
     const updatedQuestion = await prisma.question.findUnique({
-      where: { id },
+      where: { id: parseInt(id) },
       include: {
         answers: true,
       },
@@ -165,9 +163,9 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
 
-    if (isNaN(id)) {
+    if (isNaN(parseInt(id))) {
       return NextResponse.json(
         { error: 'Invalid question ID' },
         { status: 400 }
@@ -175,7 +173,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     await prisma.question.delete({
-      where: { id },
+      where: { id: parseInt(id) },
     });
 
     return NextResponse.json({ message: 'Question deleted successfully' });

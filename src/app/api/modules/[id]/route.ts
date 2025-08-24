@@ -2,21 +2,19 @@ import prisma from '@/lib/db';
 import { NextRequest, NextResponse } from 'next/server';
 
 interface RouteParams {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 }
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
 
-    if (isNaN(id)) {
+    if (isNaN(parseInt(id))) {
       return NextResponse.json({ error: 'Invalid module ID' }, { status: 400 });
     }
 
     const qModule = await prisma.module.findUnique({
-      where: { id },
+      where: { id: parseInt(id) },
       include: {
         subject: true,
         subModules: true,
@@ -39,9 +37,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
 
-    if (isNaN(id)) {
+    if (isNaN(parseInt(id))) {
       return NextResponse.json({ error: 'Invalid module ID' }, { status: 400 });
     }
 
@@ -75,7 +73,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     const qModule = await prisma.module.update({
-      where: { id },
+      where: { id: parseInt(id) },
       data: {
         name,
         description,
@@ -95,14 +93,14 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
 
-    if (isNaN(id)) {
+    if (isNaN(parseInt(id))) {
       return NextResponse.json({ error: 'Invalid module ID' }, { status: 400 });
     }
 
     await prisma.module.delete({
-      where: { id },
+      where: { id: parseInt(id) },
     });
 
     return NextResponse.json({ message: 'Module deleted successfully' });

@@ -2,16 +2,14 @@ import prisma from '@/lib/db';
 import { NextRequest, NextResponse } from 'next/server';
 
 interface RouteParams {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 }
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
 
-    if (isNaN(id)) {
+    if (isNaN(parseInt(id))) {
       return NextResponse.json(
         { error: 'Invalid subject ID' },
         { status: 400 }
@@ -19,7 +17,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
 
     const subject = await prisma.subject.findUnique({
-      where: { id },
+      where: { id: parseInt(id) },
       include: {
         modules: true,
       },
@@ -41,9 +39,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
 
-    if (isNaN(id)) {
+    if (isNaN(parseInt(id))) {
       return NextResponse.json(
         { error: 'Invalid subject ID' },
         { status: 400 }
@@ -58,7 +56,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     const subject = await prisma.subject.update({
-      where: { id },
+      where: { id: parseInt(id) },
       data: {
         name,
         description,
@@ -77,9 +75,9 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
 
-    if (isNaN(id)) {
+    if (isNaN(parseInt(id))) {
       return NextResponse.json(
         { error: 'Invalid subject ID' },
         { status: 400 }
@@ -87,7 +85,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     await prisma.subject.delete({
-      where: { id },
+      where: { id: parseInt(id) },
     });
 
     return NextResponse.json({ message: 'Subject deleted successfully' });
