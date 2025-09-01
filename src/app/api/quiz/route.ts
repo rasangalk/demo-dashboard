@@ -77,10 +77,21 @@ export async function GET(request: NextRequest) {
       include: { answers: true },
     });
 
+    // Function to shuffle an array using Fisher-Yates algorithm
+    const shuffleArray = <T>(array: T[]): T[] => {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    };
+
     const formatted = questions.map((q) => ({
       id: String(q.id),
       text: q.text,
-      options: q.answers.map((a) => ({
+      // Shuffle the answer options for each question
+      options: shuffleArray(q.answers).map((a) => ({
         id: String(a.id),
         text: a.text,
         isCorrect: a.isCorrect,
